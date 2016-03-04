@@ -1,6 +1,6 @@
-module RedshiftCopier; class CopyFile
+module RedshiftCopier; class Copy
 
-  attr_reader :schema, :table, :create_sql, :aws_access_key_id, :aws_secret_access_key, :s3_csv_location, :db_config, :copy_command_options
+  attr_reader :schema, :table, :create_sql, :aws_access_key_id, :aws_secret_access_key, :s3_path, :db_config, :copy_command_options
 
   def initialize(args)
     @schema = args.fetch(:schema)
@@ -8,7 +8,7 @@ module RedshiftCopier; class CopyFile
     @create_sql = args.fetch(:create_sql)
     @aws_access_key_id = args.fetch(:aws_access_key_id)
     @aws_secret_access_key = args.fetch(:aws_secret_access_key)
-    @s3_csv_location = args.fetch(:s3_csv_location)
+    @s3_path = args.fetch(:s3_path)
     @db_config = args.fetch(:db_config)
     @copy_command_options = args.fetch(:copy_command_options, "dateformat 'auto' timeformat 'auto' blanksasnull emptyasnull escape removequotes delimiter ',' ignoreheader 1;")
   end
@@ -34,7 +34,7 @@ module RedshiftCopier; class CopyFile
   end
 
   def copy_sql
-    "copy #{schema}.#{table} from '#{s3_csv_location}'"\
+    "copy #{schema}.#{table} from '#{s3_path}'"\
     " credentials '#{credentials}'"\
     " #{copy_command_options}"
   end
