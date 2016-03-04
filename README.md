@@ -33,6 +33,34 @@ The `copy_command_options` need to be updated depending on your data.  For examp
 
 ## Copying a collection of files
 
+Copying a collection of files is similar to copying a single file, but it requires a manifest file.
+
+```json
+{
+  "entries": [
+    {"url":"s3://some_bucket/some_folder/0000_part_00.gz"},
+    {"url":"s3://some_bucket/some_folder/0001_part_00.gz"}
+  ]
+}
+```
+
+The path to the manifest file must be set in `s3_path` and the `copy_command_options` must specify the manifest option.
+
+```ruby
+args = {
+  schema: "schema name",
+  table: "table name",
+  create_sql: File.read("path to create.sql file"),
+  aws_access_key_id: "aws_access_key_id",
+  aws_secret_access_key: "aws_secret_access_key",
+  s3_path: "s3://some_bucket/some_folder/manifest",
+  db_config: db_config,
+  copy_command_options: "manifest dateformat 'auto' timeformat 'auto' blanksasnull emptyasnull escape gzip removequotes delimiter '|';"
+}
+copier = RedshiftCopier::Copy.new(args)
+copy.run
+```
+
 ## Installation
 
 Add this line to your application's Gemfile:
@@ -45,24 +73,9 @@ And then execute:
 
     $ bundle
 
-Or install it yourself as:
-
-    $ gem install redshift_copier
-
-## Usage
-
-TODO: Write usage instructions here
-
-## Development
-
-After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
-
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
-
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/redshift_copier.
-
+Bug reports and pull requests are welcome on GitHub at https://github.com/MrPowers/redshift_copier.
 
 ## License
 
