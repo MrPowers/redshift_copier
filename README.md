@@ -2,9 +2,9 @@
 
 The redshift_copier gem can be used to copy a single CSV file or a collection of files in S3 into Redshift.  If you would like to move data from one Redshift cluster to another, see the [redshift_extractor gem](https://github.com/MrPowers/redshift_extractor/).
 
-## Copying a single file
+## Copying without a manifest file
 
-Here is how to use the redshift_copier gem to copy a single file.
+Here is how to use the redshift_copier gem to copy file(s) without a manifest file.
 
 ```ruby
 db_config = {
@@ -31,7 +31,9 @@ copier.run
 
 The `copy_command_options` need to be updated depending on your data.  For example, if your CSV file does not have a header row, the `ignoreheader 1` option should be removed.
 
-## Copying a collection of files
+To copy a collection of files, set the `s3_path` to a folder: `"s3://some_bucket/some_folder/"`.  All the files in the folder will be copied and they all must have the same CSV structure.
+
+## Copying with a manifest file
 
 Copying a collection of files is similar to copying a single file, but it requires a manifest file.
 
